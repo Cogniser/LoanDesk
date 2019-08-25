@@ -37,11 +37,8 @@ public class LoanDeskService {
        return loanDeskDao.findCustomer(phoneNum);
     }
 
-    public Long createLoanApplication(JsonNode loanApplicationRequest){
+    public Long createLoanApplication(JsonNode loanApplicationRequest,Customer customer){
         LoanApplication application = new LoanApplication();
-
-        String phoneNum = loanApplicationRequest.get("phoneNumber").asText();
-        Customer customer = findCustomer(phoneNum);
 
         String emiStr = loanApplicationRequest.get("emi").asText();
         BigDecimal emi = new BigDecimal(emiStr);
