@@ -7,7 +7,7 @@
  
  Note: you must install git utility to work with this repo, if you didn't then follow this to setup git[https://git-scm.com/book/en/v2/Getting-Started-Installing-Git]
 
-# Developer Setup
+# Development Setup
 
  1. Download this repo by using the blow command
  ```git clone https://github.com/Cogniser/LoanDesk.git```
