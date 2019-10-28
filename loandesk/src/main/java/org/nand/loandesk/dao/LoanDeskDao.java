@@ -27,6 +27,10 @@ public class LoanDeskDao {
         return customerRepository.findCustomerByPhoneNumber(phoneNum);
     }
 
+    public Customer validateLogin(String phoneNum,String password){
+        return customerRepository.findCustomerByPhoneNumberAndPassword(phoneNum,password);
+    }
+
     public LoanApplication createLoanApplication(LoanApplication loanApplication ){
         return loanApplicationRepository.save(loanApplication);
     }
@@ -35,4 +39,7 @@ public class LoanDeskDao {
         return loanApplicationRepository.findByCustomerId(customerId);
     }
 
+    public Customer updateCustomer(Customer customer){
+        return customerRepository.save(customer);
+    }
 }

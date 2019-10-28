@@ -10,4 +10,5 @@ import java.util.List;
 public interface CustomerRepository extends JpaRepository<Customer,Long> {
     List<Customer> findAll();
     Customer findCustomerByPhoneNumber(String phoneNum);
+    Customer findCustomerByPhoneNumberAndPassword(String phoneNum, String password);
 }

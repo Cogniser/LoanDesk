@@ -87,6 +87,8 @@ public class LoanDeskController {
             JsonNode customerNode = objectMapper.readTree(req);
             Customer customer = loanDeskService.createCustomer(customerNode);
             if(customer!=null){
+                String pwd = loanDeskService.generateLoginPassword();
+                customer.setPassword(pwd);
                 return ResponseEntity.ok(customer);
             }
             else{
@@ -119,6 +121,65 @@ public class LoanDeskController {
             ex.printStackTrace();
             return ResponseEntity.badRequest()
                     .body("Exception while getting customer details with phone number " + phoneNum);
+        }
+
+    }
+
+    @PostMapping("login")
+    public ResponseEntity processLogin(@RequestBody String loginReq){
+        List<LoanApplication> loanList;
+        try{
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode reqNode = objectMapper.readTree(loginReq);
+            String phoneNum = reqNode.get("phoneNumber").asText();
+            String pwd = reqNode.get("password").asText();
+
+            Customer customer = loanDeskService.validateLogin(phoneNum,pwd);
+            if(customer!=null){
+                loanList = loanDeskService.getLoanApplications(customer);
+                CustomerLoanDetails customerLoanDetails = new CustomerLoanDetails();
+                customerLoanDetails.setCustomer(customer);
+                customerLoanDetails.setLoans(loanList);
+
+                return ResponseEntity.ok(customerLoanDetails);
+            }else {
+                return ResponseEntity.badRequest()
+                        .body("Customer details not found with phone number" + phoneNum);
+            }
+        }catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.badRequest()
+                    .body("Exception while getting customer details for " + loginReq);
+        }
+
+    }
+
+    @PostMapping("password")
+    public ResponseEntity resetPassword(@RequestBody String resetReq){
+        List<LoanApplication> loanList;
+        try{
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode reqNode = objectMapper.readTree(resetReq);
+            String phoneNum = reqNode.get("phoneNumber").asText();
+            String otp = reqNode.get("oneTimePassword").asText();
+            String newPwd = reqNode.get("newPassword").asText();
+
+            Customer customer = loanDeskService.resetPassword(phoneNum,newPwd,otp);
+            if(customer!=null){
+                loanList = loanDeskService.getLoanApplications(customer);
+                CustomerLoanDetails customerLoanDetails = new CustomerLoanDetails();
+                customerLoanDetails.setCustomer(customer);
+                customerLoanDetails.setLoans(loanList);
+
+                return ResponseEntity.ok(customerLoanDetails);
+            }else {
+                return ResponseEntity.badRequest()
+                        .body("Customer details not found with phone number" + phoneNum);
+            }
+        }catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.badRequest()
+                    .body("Exception while getting customer details for " + resetReq);
         }
 
     }

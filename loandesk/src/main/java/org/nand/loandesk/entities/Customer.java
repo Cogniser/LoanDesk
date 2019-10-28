@@ -33,6 +33,9 @@ public class Customer implements Serializable {
     @Column
     private String address;
 
+    @Column(nullable = false)
+    private String password;
+
     public Long getId() {
         return id;
     }
@@ -73,4 +76,11 @@ public class Customer implements Serializable {
         this.address = address;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

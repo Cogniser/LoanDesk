@@ -37,6 +37,20 @@ public class LoanDeskService {
        return loanDeskDao.findCustomer(phoneNum);
     }
 
+    public Customer validateLogin(String phoneNum,String password){
+        return loanDeskDao.validateLogin(phoneNum,password);
+    }
+
+    public Customer resetPassword(String phoneNum,String newPassword,String otp){
+        if(otp.equalsIgnoreCase("12345")){
+            Customer customer = loanDeskDao.findCustomer(phoneNum);
+            customer.setPassword(newPassword);
+            return loanDeskDao.updateCustomer(customer);
+        }else{
+            return null;
+        }
+    }
+
     public Long createLoanApplication(JsonNode loanApplicationRequest,Customer customer){
         LoanApplication application = new LoanApplication();
 
@@ -65,5 +79,9 @@ public class LoanDeskService {
             return true;
         }
         return false;
+    }
+
+    public String generateLoginPassword(){
+        return "loan123";
     }
 }
